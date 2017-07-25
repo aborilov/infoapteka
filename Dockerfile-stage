@@ -1,0 +1,5 @@
+FROM moqod/django-backend
+COPY /requirements /code/requirements
+WORKDIR /code/
+RUN pip install --no-cache-dir -r /code/requirements/base.txt
+

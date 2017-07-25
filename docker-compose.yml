@@ -1,0 +1,37 @@
+version: '2.1'
+services:
+
+  web:
+    environment:
+      - DO_DJANGO_INIT=true
+      - DJANGO_SETTINGS_MODULE=infoapteka.settings.docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+    depends_on:
+      dockerize:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    volumes:
+    - ./database:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_USER=drugs
+    - POSTGRES_PASSWORD=azsxdcfv
+    - POSTGRES_DB=drugs
+    restart: unless-stopped
+
+  dockerize:
+    image: jwilder/dockerize
+    command: ["dockerize", "-wait", "tcp://db:5432", "-timeout", "50s"]
+    healthcheck:
+        test: dockerize -wait tcp://db:5432 -timeout 1s
+        interval: 5s
+        timeout: 5s
+        retries: 30
+    depends_on:
+      - db

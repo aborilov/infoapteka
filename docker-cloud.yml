@@ -1,0 +1,13 @@
+web:
+  environment:
+    - DO_DJANGO_INIT=true
+    - DJANGO_SETTINGS_MODULE=infoapteka.settings.docker
+  image: aborilov/infoapteka
+  ports:
+    - "8000:80"
+db:
+  image: postgres
+  environment:
+  - POSTGRES_USER=drugs
+  - POSTGRES_PASSWORD=azsxdcfv
+  - POSTGRES_DB=drugs
